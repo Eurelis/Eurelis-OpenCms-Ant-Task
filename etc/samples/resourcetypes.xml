@@ -1,0 +1,15 @@
+<!-- <resourcetypes>
+  n-types ( autant que necessaire )
+  <type class="org.opencms.file.types.CmsResourceTypeXmlContent" name="PageJB"
+    id="246">
+    <properties> n-properties
+      <property>
+        <name>template</name>
+        <value type="shared">
+          <![CDATA[/system/modules/org.afmbiomed/elements/include/jobsevents/bloc.jsp]]>
+        </value>
+      </property> </properties>
+    <param name="schema">
+      /system/modules/org.afmbiomed/schemas/page_jobsevents.xsd</param>
+  </type>
+</resourcetypes> -->

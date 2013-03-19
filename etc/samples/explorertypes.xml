@@ -1,0 +1,12 @@
+<!--<explorertypes>
+  AUTANT DE explorertype QUE NECESSAIRE
+  <explorertype name="PageJB" key="fileicon.pagejb" icon="xmlcontent.gif"
+    reference="xmlcontent">
+    <newresource page="structurecontent"
+      uri="newresource_xmlcontent.jsp?newresourcetype=PageJB" order="246"
+      autosetnavigation="false" autosettitle="false"/>
+    <accesscontrol>
+      <accessentry principal="GROUP.Administrators" permissions="+r+v+w+c"/> répétable n-fois
+    </accesscontrol>
+  </explorertype>
+</explorertypes>-->

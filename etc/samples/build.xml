@@ -1,0 +1,203 @@
+<project name="OpenCMS - Sync Task" default="compress" basedir=".">
+
+	<!-- Les deux fichiers XML qui serviront de modèle pour les branches créant les -->
+	<!-- resourceTypes et les explorerTypes -->	
+	<property name="file.resourcetypes" value="etc/explorertypes.xml" />
+	<property name="file.explorertypes" value="etc/resourcetypes.xml" />
+
+	<!-- Des flags de configuration générale -->
+	<property name="flag.uuids" value="false" />
+		
+	<!-- Le repertoire où sera créé le .ZIP -->
+	<property name="folder.archives" value="modules" />
+	<!-- Le repertoire où sera construit le module -->
+	<property name="folder.dist" value="dist" />
+	<!-- le repertoire où se trouvent les librairies liées à la tâche -->
+	<property name="folder.lib" value="etc/distlib" />
+	<!-- Le repertoire où contenant les classes et en particuliers la tache ANT-->
+	<property name="folder.bin" value="bin" />
+	<!-- Le repertoire contenant les cources du module -->
+	<property name="folder.module" value="vfs_module" />
+
+  
+  
+	<!-- UNE SERIE DE PROPRIETES PASSEES EN PARAMETRE A LA TACHE PRINCIPALE -->
+	<property name="module.info.creator" value="Admin" />
+	<!--la version d'OpenCms pour l'export/import-->
+	<property name="module.info.opencmsversion" value="7.0.3" />
+	<property name="module.info.project" value="Offline" />
+	<!--la version de la classe d'import d'OpenCms-->
+	<property name="module.info.exportversion" value="6" />
+	<property name="module.module.name" value="com.eurelis.opencms.module.name" />
+	<property name="module.module.nicename" value="A test module for sync task" />
+	<property name="module.module.group" value="OpenCms TaskTest" />
+	<property name="module.module.moduleclass" value="" />
+	<property name="module.module.moduledescription" value="usefull test description" />
+	<property name="module.module.version" value="1.0.0" />
+	<property name="module.module.authorname" value="Eurelis" />
+	<property name="module.module.authoremail" value="contact@eurelis.com" />
+	<property name="module.module.userinstalled" value="" />
+	<property name="module.module.dateinstalled" value="" />
+
+	<!-- Classpath pour le script de déploiement automatique du module -->
+	<property name="classpath.cmsshell" value="../Tools/etc/complib/opencms/opencms.jar;../Tools/etc/complib/opencms/jakarta-oro-2.0.8.jar;../Tools/etc/complib/opencms/commons-logging-1.1.jar;../Tools/etc/complib/opencms/log4j-1.2.14.jar;../Tools/etc/complib/j2ee/servlet.jar;../Tools/etc/complib/opencms/commons-collections-3.2.jar;../Tools/etc/complib/opencms/jug-lgpl-2.0.0.jar;../Tools/etc/complib/opencms/dom4j-1.6.1.jar;../Tools/etc/complib/opencms/commons-digester-1.8.jar;../Tools/etc/complib/opencms/commons-beanutils-1.7.0.jar;../Tools/etc/complib/opencms/quartz-1.5.2.jar;../Tools/etc/complib/opencms/commons-dbcp-1.2.2.jar;../Tools/etc/complib/opencms/commons-email-1.0-mod.jar;../Tools/etc/complib/opencms/commons-pool-1.3.jar;../Tools/etc/complib/opencms/htmlparser-1.6-20060610.jar;../Tools/etc/complib/opencms/lucene-core-2.2.0.jar;../Tools/etc/complib/opencms/lucene-highlighter-2.2.0.jar;../Tools/etc/complib/opencms/mysql-connector-java-5.0.7-bin.jar;../Tools/etc/complib/opencms/org.opencms.frontend.templateone.jar;../Tools/etc/complib/opencms/commons-codec-1.3.jar;../Tools/etc/complib/opencms/jaxen-full.jar;../Tools/etc/complib/opencms/saxpath.jar" />
+	
+	<!-- Répertoire de base d'installation d'OpenCMS  (pour le déploiement automatique du module -->
+	<property name="opencms.basedir" value="__TBD__" />
+	
+
+	<!-- <taskdef name="manifest" classname="com.eurelis.opencms.ant.task.ManifestBuilderTask" classpath="${classpath}"/>-->
+	<taskdef name="manifest" classname="com.eurelis.opencms.ant.task.ManifestBuilderTask"/>
+
+	<target name="todo">
+	</target>
+	
+	<!--
+		Legend:
+			! New Feature
+			* Bug fixed
+			- General comment
+	-->
+	<target name="history">
+	</target>
+	
+	<!--LA TACHE PRINCIPALE, CONSTRUISANT LE MANIFEST-->
+	<target name="buildManifest" depends="createModuleTree">
+		<!--l'appel de la tache, avec en attribut, toutes les propriétés déclarées avant-->
+		<manifest generateuuids="${flag.uuids}"
+			distfolder="${folder.dist}"
+			srcfolder="${folder.module}"
+			resourcetypes="${file.resourcetypes}"
+			explorertypes="${file.explorertypes}"
+			creator="${module.info.creator}" 
+			opencmsversion="${module.info.opencmsversion}" 
+			project="${module.info.project}" 
+			exportversion="${module.info.exportversion}" 
+			name="${module.module.name}" 
+			nicename="${module.module.nicename}" 
+			group="${module.module.group}" 
+			moduleclass="${module.module.moduleclass}" 
+			moduledescription="${module.module.moduledescription}" 
+			version="${module.module.version}" 
+			authorname="${module.module.authorname}" 
+			authoremail="${module.module.authoremail}" 
+			userinstalled="${module.module.userinstalled}" 
+			dateinstalled="${module.module.dateinstalled}">
+				<!--Le corps de notre tache : l'endroit ideal pour déclarer des nested types !!!-->
+				<!-- On en distingue 4 types :-->
+					<!--Les POINTS D'EXPORTS-->
+            <!-- <exportpoint src="source" dst="destination"/> X répétitions possibles-->
+           		<!--Les RESSOURCES DE MODULE-->
+	        <!-- <resource uri="test/uri/resource/test.jpg"/> X répétitions possibles-->
+					<!--Les PARAMETRES-->
+				    <!-- <parameter name="nom" value='valeur'/> X répétitions possibles-->
+					<!--Les DEPENDANCES (vis a vis d'autres modules)-->
+				    <!-- <dependency name="nomdumodule" version="1"/> X répétitions possibles-->
+
+				<!--Un dernier type : le pack de fichiers traités par le module-->
+		    		<fileset dir="${folder.dist}" excludes="**/__properties,**/__properties/**,**/__acl,**/__acl/**"/>
+				<!--Ajouté en dur, cette description inclut tout le contenu du répertoire de source du
+				module, __properties mis à part ! -->
+
+		</manifest>
+	</target>
+
+	<!-- création de l'arborescence du module -->
+	<target name="createModuleTree">
+		<delete dir="${folder.dist}" />
+		<mkdir dir="${folder.dist}" />
+
+		<copy todir="${folder.dist}">
+			<fileset dir="${folder.module}" excludes="**/__properties,**/__properties/**,**/__acl,**/__acl/**"/>
+		</copy>
+	</target>
+	
+	<property name="file.zip" value="${folder.archives}/${module.module.name}_${module.module.version}.zip" />
+	<property name="name.zip" value="${module.module.name}_${module.module.version}.zip" />
+		
+	<!-- Une tâche qui crée le .ZIP -->
+	<target name="compress" depends="buildManifest">
+		<zip destfile="${file.zip}">
+		    <zipfileset dir="${folder.dist}" excludes="**/__properties/**,**/__acl/**"/>
+		</zip>
+	</target>
+	
+	<property name="opencms.username" value="Admin" />
+	<property name="opencms.password" value="admin" />
+	<property name="opencms.project" value="Offline" />
+
+	<target name="synchronizeModule" description="Synchronize Module with the OpenCms VFS" depends="compress">
+		
+		<delete file="${opencms.basedir}/opencms/WEB-INF/packages/modules/${name.zip}"/>
+		<copy file="${file.zip}" todir="${opencms.basedir}/opencms/WEB-INF/packages/modules/"/>
+		
+		<echo file="shell.input">
+			login ${opencms.username} ${opencms.password}
+			deleteModule "${module.module.name}"
+			importModuleFromDefault "${name.zip}"
+			exit
+		</echo>
+
+		<!--You have to declare :-->
+		<!-- -JAVA_HOME-->
+		<!-- -OPENCMS_HOME-->
+		<!-- -TOMCAT_HOME-->
+		<java classname="org.opencms.main.CmsShell" fork="true" input="shell.input" classpath="${classpath.cmsshell}">
+			<arg value="-base=${opencms.basedir}/opencms/WEB-INF" />
+			<arg value="-defaultWebApp=opencms" />
+			<arg value="-servletMapping=opencms" />
+		</java>
+
+		<delete file="shell.input" quiet="true" />
+	</target>
+
+	<target name="initModule" description="Copy Module to the OpenCms VFS" depends="compress">
+		
+		<delete file="${opencms.basedir}/opencms/WEB-INF/packages/modules/${name.zip}"/>
+		<copy file="${file.zip}" todir="${opencms.basedir}/opencms/WEB-INF/packages/modules/"/>
+		
+		<echo file="shell.input">
+			login ${opencms.username} ${opencms.password}
+			importModuleFromDefault "${name.zip}"
+			exit
+		</echo>
+
+		<!--You have to declare :-->
+		<!-- -JAVA_HOME-->
+		<!-- -OPENCMS_HOME-->
+		<!-- -TOMCAT_HOME-->
+		<java classname="org.opencms.main.CmsShell" fork="true" input="shell.input" classpath="${classpath.cmsshell}">
+			<arg value="-base=${opencms.basedir}/opencms/WEB-INF" />
+			<arg value="-defaultWebApp=opencms" />
+			<arg value="-servletMapping=opencms" />
+		</java>
+
+		<delete file="shell.input" quiet="true" />
+	</target>
+
+	<target name="deleteModule" description="Delete Module from the OpenCms VFS" depends="compress">
+		
+		<delete file="${opencms.basedir}/opencms/WEB-INF/packages/modules/${name.zip}"/>
+		<copy file="${file.zip}" todir="${opencms.basedir}/opencms/WEB-INF/packages/modules/"/>
+		
+		<echo file="shell.input">
+			login ${opencms.username} ${opencms.password}
+			deleteModule "${module.module.name}"
+			exit
+		</echo>
+
+		<!--You have to declare :-->
+		<!-- -JAVA_HOME-->
+		<!-- -OPENCMS_HOME-->
+		<!-- -TOMCAT_HOME-->
+		<java classname="org.opencms.main.CmsShell" fork="true" input="shell.input" classpath="${classpath.cmsshell}">
+			<arg value="-base=${opencms.basedir}/opencms/WEB-INF" />
+			<arg value="-defaultWebApp=opencms" />
+			<arg value="-servletMapping=opencms" />
+		</java>
+
+		<delete file="shell.input" quiet="true" />
+	</target>
+
+</project>
+

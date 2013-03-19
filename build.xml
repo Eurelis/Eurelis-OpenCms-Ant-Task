@@ -1,0 +1,62 @@
+
+<project name="OpenCMS - AntTask" default="jar" basedir=".">
+
+	<property name="jar.name" value="com.eurelis.opencms.ant.task" />
+	<property name="jar.version" value="1.0.5" />
+	<property name="jar.home" value="jar" />
+	<property name="src.home" value="src" />
+	<property name="build.home" value="build"/>
+	<property name="classpath" value="etc/complib/"/>
+
+	<target name="init" depends="clean" >
+		<echo message="Init..." />
+		<tstamp />
+		<mkdir dir="${build.home}" />
+		<mkdir dir="${jar.home}" />
+	</target>
+
+	<target name="build" depends="init" description="Compile the java code from ${src.home} into ${build.home}.">
+	    <echo message="${classpath}"/>
+		<echo message="Build..." />
+		<javac srcdir="${src.home}" destdir="${build.home}" debug="on" source="1.5" target="1.5">
+      <classpath>
+		  	<fileset dir="${classpath}" includes="*.jar"/>
+		  </classpath>
+		</javac>
+	</target>
+
+	<target name="clean">
+		<echo message="Clean..." />
+		<delete dir="${build.home}" />
+	</target>
+
+	<target name="jar" depends="build" description="Create JAR file.">
+		<echo message="Jar..." />
+		<jar jarfile="${jar.home}/${jar.name}.${jar.version}.jar" basedir="${build.home}"/>
+		<echo message="Jar compressed." />
+	</target>
+
+	<!-- Une tâche qui crée le .ZIP -->
+	<target name="zip" depends="jar">
+		<zip destfile="${jar.name}.${jar.version}.zip">
+		    <zipfileset dir="etc" />
+		    <zipfileset dir="jar" includes="${jar.name}.${jar.version}.jar" />
+		</zip>
+	</target>
+
+	<target name="todo">
+	</target>
+	
+	<!--
+		Legend:
+			! New Feature
+			* Bug fixed
+			- General comment
+	-->
+	<target name="history">
+	  <echo message="Release 1.0.5 : 27/09/2012 OpenCms 8.5 infoproject tag" />
+	  <echo message="Release 1.0.4 : 13/08/2012 linux support" />
+		<echo message="Release 1.0.3 : 28/04/2008" />
+	</target>
+</project>
+
