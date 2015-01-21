@@ -169,22 +169,27 @@ public class ManifestBuilderTask  extends Task{
         			Element tmpFile = files.addElement("file");
           		tmpFile.addElement("destination").addText(filepathUnix);
           		
-          		String tmpType = getEurelisProperty("type",getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+folderPropertiesPath(filepath));
+          		String folderPropertiesPath = getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+folderPropertiesPath(filepath);
+          		String tmpType = getEurelisProperty("type",folderPropertiesPath);
           		if(null == tmpType)tmpType = "folder";
           		tmpFile.addElement("type").addText(tmpType);
           		
 
           		if (generateuuids) {
             		Element uuidNode = tmpFile.addElement("uuidstructure");
-            		String tmpUUID = getEurelisProperty("structureUUID",getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+folderPropertiesPath(filepath));
+            		String tmpUUID = getEurelisProperty("structureUUID",folderPropertiesPath);
             		if(null != tmpUUID) uuidNode.addText(tmpUUID);
             		else uuidNode.addText(new CmsUUID().toString());
             		//AJOUTER SAUVEGARDE DU NOUVEL UUID
           		}
-          		tmpFile.addElement("datelastmodified").addText(dateformat.format(new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified()));
+              
+              long date = new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified();
+              if(0L == date) date = new Date().getTime();
+              String formattedDate = dateformat.format(date);
+          		tmpFile.addElement("datelastmodified").addText(formattedDate);
           		tmpFile.addElement("userlastmodified").addText("Admin");
           		//WARNING : CONSTANT VALUE
-          		tmpFile.addElement("datecreated").addText(dateformat.format(new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified()));
+          		tmpFile.addElement("datecreated").addText(formattedDate);
           		//WARNING : CONSTANT VALUE
           		tmpFile.addElement("usercreated").addText("Admin");
           		tmpFile.addElement("flags").addText("0");
@@ -192,7 +197,7 @@ public class ManifestBuilderTask  extends Task{
 
           		Element properties = tmpFile.addElement("properties");
           		//props detection and implementation
-        			String tmpPropFile = getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+folderPropertiesPath(filepath);
+        			String tmpPropFile = folderPropertiesPath;
         			addPropertiesToTree(properties, tmpPropFile);
 
         			String tmpAccessFile = getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+folderAccessesPath(filepath);
@@ -208,28 +213,33 @@ public class ManifestBuilderTask  extends Task{
           		tmpFile.addElement("source").addText(filepathUnix);
           		tmpFile.addElement("destination").addText(filepathUnix);
           		
-          		String tmpType = getEurelisProperty("type",getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filePropertiesPath(filepath));
+          		String propertiesFilepath = getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filePropertiesPath(filepath);
+          		String tmpType = getEurelisProperty("type",propertiesFilepath);
           		if(null == tmpType)tmpType = "plain";
           		tmpFile.addElement("type").addText(tmpType);
 
           		if(generateuuids){
             		Element uuidNode = tmpFile.addElement("uuidresource");
             		Element uuidNode2 = tmpFile.addElement("uuidstructure");
-            		String tmpUUID = getEurelisProperty("resourceUUID",getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filePropertiesPath(filepath));
+            		String tmpUUID = getEurelisProperty("resourceUUID",propertiesFilepath);
             		if(null != tmpUUID) uuidNode.addText(tmpUUID);
             		else uuidNode.addText(new CmsUUID().toString());
-            		tmpUUID = getEurelisProperty("structureUUID",getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filePropertiesPath(filepath));
+            		tmpUUID = getEurelisProperty("structureUUID",propertiesFilepath);
             		if(null != tmpUUID) uuidNode2.addText(tmpUUID);
             		else uuidNode2.addText(new CmsUUID().toString());
           		}
           		
-          		tmpFile.addElement("datelastmodified").addText(dateformat.format(new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified()));
+          		long date = new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified();
+          		if(0L == date) date = new Date().getTime();
+          		String formattedDate = dateformat.format(date);
+          		
+          		tmpFile.addElement("datelastmodified").addText(formattedDate);
           		tmpFile.addElement("userlastmodified").addText("Admin");
-          		tmpFile.addElement("datecreated").addText(dateformat.format(new File(getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filepath).lastModified()));
+          		tmpFile.addElement("datecreated").addText(formattedDate);
           		tmpFile.addElement("usercreated").addText("Admin");
           		tmpFile.addElement("flags").addText("0");
           		Element properties = tmpFile.addElement("properties");
-          		String tmpPropFile = getProject().getBaseDir()+SEPARATOR+srcfolder+SEPARATOR+filePropertiesPath(filepath);
+          		String tmpPropFile = propertiesFilepath;
           		addPropertiesToTree(properties, tmpPropFile);
           		
           		tmpFile.addElement("accesscontrol");

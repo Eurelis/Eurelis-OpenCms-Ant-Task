@@ -2,7 +2,7 @@
 <project name="OpenCMS - AntTask" default="jar" basedir=".">
 
 	<property name="jar.name" value="com.eurelis.opencms.ant.task" />
-	<property name="jar.version" value="1.0.5" />
+	<property name="jar.version" value="1.0.6" />
 	<property name="jar.home" value="jar" />
 	<property name="src.home" value="src" />
 	<property name="build.home" value="build"/>
@@ -54,6 +54,7 @@
 			- General comment
 	-->
 	<target name="history">
+    <echo message="Release 1.0.6 : 21/01/2015 if date is null, takes the current date" />
 	  <echo message="Release 1.0.5 : 27/09/2012 OpenCms 8.5 infoproject tag" />
 	  <echo message="Release 1.0.4 : 13/08/2012 linux support" />
 		<echo message="Release 1.0.3 : 28/04/2008" />
