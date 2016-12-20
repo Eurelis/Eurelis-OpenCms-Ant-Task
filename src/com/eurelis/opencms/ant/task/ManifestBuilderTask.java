@@ -218,6 +218,8 @@ public class ManifestBuilderTask extends Task {
                 tmpType = "containerpage_template";
               else if (filepathUnix.endsWith(".jsp"))
                 tmpType = "jsp";
+              else if (filepathUnix.endsWith(".png")||filepathUnix.endsWith(".gif")||filepathUnix.endsWith(".jpg")||filepathUnix.endsWith(".jpeg"))
+                tmpType = "image";
               else if (filepathUnix.endsWith(".html") && filepathUnix.contains("/models/"))
                 tmpType = "containerpage";
               else
